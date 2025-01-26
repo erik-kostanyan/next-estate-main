@@ -2,3 +2,6 @@
 
 
 "app/sign-in/[[...sign-in]]/page.tsx", "app/sign-out/[[...sign-out]]/page.tsx" and src/middleware.js are from the Clerk documentation
+
+
+We use webhooks to sync the app data to Clerk using an API
