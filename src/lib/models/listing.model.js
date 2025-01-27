@@ -1,52 +1,64 @@
-import mongoose from 'mongoose';
+import mongoose, { trusted } from 'mongoose';
 const listingSchema = new mongoose.Schema(
   {
-    name: {
+    city: {
       type: String,
       required: true,
     },
-    description: {
+    geolocation: {
       type: String,
-      required: true,
+      required: false,
+      default: "",
     },
-    address: {
-      type: String,
-      required: true,
-    },
-    regularPrice: {
+    indoor_surface: {
       type: Number,
-      required: true,
+      required: true
     },
-    discountPrice: {
-      type: Number,
-      required: true,
+    nb_bedrooms: {
+      type: Number, 
+      required: true
     },
-    bathrooms: {
-      type: Number,
-      required: true,
-    },
-    bedrooms: {
-      type: Number,
-      required: true,
-    },
-    furnished: {
-      type: Boolean,
-      required: true,
+    nb_rooms: {
+      type: Number, 
+      required: true
     },
     parking: {
       type: Boolean,
-      required: true,
+      required: true
     },
-    type: {
+    price: {
+      type: Number,
+      required: true
+    },
+    province: {
+      type: String, 
+      required: true
+    },
+    zip_code: {
       type: String,
-      required: true,
+      required: true
+    },
+    images: {
+      type: String,
+      required: true
+    }, 
+    discription: {
+      type: String, 
+      required: false,
+      default: ""
+    },
+    furnished: {
+      type: Boolean, 
+      required: false,
+      default: false
     },
     offer: {
       type: Boolean,
-      required: true,
+      required: false,
+      default: false
     },
-    imageUrls: {
-      type: Array,
+    type: {
+      type: String,
       required: true,
     },
     userRef: {

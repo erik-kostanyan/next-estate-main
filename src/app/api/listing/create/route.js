@@ -13,18 +13,20 @@ export const POST = async (req) => {
     }
     const newListing = await Listing.create({
       userRef: user.publicMetadata.userMogoId,
-      name: data.name,
-      description: data.description,
-      address: data.address,
-      regularPrice: data.regularPrice,
-      discountPrice: data.discountPrice,
-      bathrooms: data.bathrooms,
-      bedrooms: data.bedrooms,
-      furnished: data.furnished,
+      city: data.city,
+      geolocation: data.geolocation, 
+      indoor_surface: data.indoor_surface, 
+      nb_bedrooms: data.nb_bedrooms, 
+      nb_rooms: data.nb_rooms, 
       parking: data.parking,
-      type: data.type,
+      price: data.price, 
+      province: data.province,
+      zip_code: data.zip_code, 
+      images: data.images,
+      discription: data.discription,
+      furnished: data.furnished,
       offer: data.offer,
-      imageUrls: data.imageUrls,
+      type: data.type
     });
     await newListing.save();
     return new Response(JSON.stringify(newListing), {

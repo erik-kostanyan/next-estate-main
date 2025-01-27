@@ -2,13 +2,6 @@
 
 import { useState } from 'react';
 
-import {
-  getStorage,
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-} from 'firebase/storage';
-
 import { useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 
@@ -21,79 +14,23 @@ export default function CreateListing() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const [formData, setFormData] = useState({
-    imageUrls: [],
-    name: '',
-    description: '',
-    address: '',
-    type: 'rent',
-    bedrooms: 1,
-    bathrooms: 1,
-    regularPrice: 50,
-    discountPrice: 0,
-    offer: false,
+    city: '',
+    geolocation: '',
+    indoor_surface: 0,
+    nb_bedrooms: 1,
+    nb_rooms: 1,
     parking: false,
+    price: 5000,
+    province: "06",
+    zip_code: "", 
+    images: "",
+    discription: "",
     furnished: false,
+    offer: false,
+    type: "rent"
   });
 
   console.log(formData);
-
-  const handleImageSubmit = (e) => {
-    if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
-      setUploading(true);
-      setImageUploadError(false);
-      const promises = [];
-      for (let i = 0; i < files.length; i++) {
-        promises.push(storeImage(files[i]));
-      }
-      Promise.all(promises)
-        .then((urls) => {
-          setFormData({
-            ...formData,
-            imageUrls: formData.imageUrls.concat(urls),
-          });
-          setImageUploadError(false);
-          setUploading(false);
-        })
-        .catch((err) => {
-          setImageUploadError('Image upload failed (2 mb max per image)');
-          setUploading(false);
-        });
-    } else {
-      setImageUploadError('You can only upload 6 images per listing');
-      setUploading(false);
-    }
-  };
-
-  const storeImage = async (file) => {
-    return new Promise((resolve, reject) => {
-      const fileName = new Date().getTime() + file.name;
-      const storageRef = ref(storage, fileName);
-      const uploadTask = uploadBytesResumable(storageRef, file);
-      uploadTask.on(
-        'state_changed',
-        (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log(`Upload is ${progress}% done`);
-        },
-        (error) => {
-          reject(error);
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            resolve(downloadURL);
-          });
-        }
-      );
-    });
-  };
-
-  const handleRemoveImage = (index) => {
-    setFormData({
-      ...formData,
-      imageUrls: formData.imageUrls.filter((_, i) => i !== index),
-    });
-  };
 
   const handleChange = (e) => {
     if (e.target.id === 'sale' || e.target.id === 'rent') {
@@ -127,10 +64,6 @@ export default function CreateListing() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (formData.imageUrls.length < 1)
-        return setError('You must upload at least one image');
-      if (+formData.regularPrice < +formData.discountPrice)
-        return setError('Discount price must be lower than regular price');
       setLoading(true);
       setError(false);
       const res = await fetch('/api/listing/create', {
@@ -170,214 +103,199 @@ export default function CreateListing() {
 
 
   return (
-    <main className='p-3 max-w-4xl mx-auto'>
-      <h1 className='text-3xl font-semibold text-center my-7'>
-        Create a Listing
-      </h1>
-      <form className='flex flex-col sm:flex-row gap-4' onSubmit={handleSubmit}>
-        <div className='flex flex-col gap-4 flex-1'>
-          <input
-            type='text'
-            placeholder='Name'
-            className='border p-3 rounded-lg'
-            id='name'
-            maxLength='62'
-            minLength='10'
-            required
-            onChange={handleChange}
-            value={formData.name}
-          />
-          <textarea
-            type='text'
-            placeholder='Description'
-            className='border p-3 rounded-lg'
-            id='description'
-            required
-            onChange={handleChange}
-            value={formData.description}
-          />
-          <input
-            type='text'
-            placeholder='Address'
-            className='border p-3 rounded-lg'
-            id='address'
-            required
-            onChange={handleChange}
-            value={formData.address}
-          />
-          <div className='flex gap-6 flex-wrap'>
-            <div className='flex gap-2'>
-              <input
-                type='checkbox'
-                id='sale'
-                className='w-5'
-                onChange={handleChange}
-                checked={formData.type === 'sale'}
-              />
-              <span>Sell</span>
-            </div>
-            <div className='flex gap-2'>
-              <input
-                type='checkbox'
-                id='rent'
-                className='w-5'
-                onChange={handleChange}
-                checked={formData.type === 'rent'}
-              />
-              <span>Rent</span>
-            </div>
-            <div className='flex gap-2'>
-              <input
-                type='checkbox'
-                id='parking'
-                className='w-5'
-                onChange={handleChange}
-                checked={formData.parking}
-              />
-              <span>Parking spot</span>
-            </div>
-            <div className='flex gap-2'>
-              <input
-                type='checkbox'
-                id='furnished'
-                className='w-5'
-                onChange={handleChange}
-                checked={formData.furnished}
-              />
-              <span>Furnished</span>
-            </div>
-            <div className='flex gap-2'>
-              <input
-                type='checkbox'
-                id='offer'
-                className='w-5'
-                onChange={handleChange}
-                checked={formData.offer}
-              />
-              <span>Offer</span>
-            </div>
+    <main className="h-screen overflow-hidden flex items-center justify-center pt-36" >
+    <div className="min-h-screen p-6 bg-gray-100 flex items-center justify-center">
+  <div className="container max-w-screen-lg mx-auto">
+    <div>
+      <h2 className="font-semibold text-xl text-gray-600">Create a listing</h2>
+      <p className="text-gray-500 mb-6">//</p>
+
+      <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
+        <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
+          <div className="text-gray-600">
+            <p className="font-medium text-lg">Personal Details</p>
+            <p>Please fill out all the fields.</p>
           </div>
-          <div className='flex flex-wrap gap-6'>
-            <div className='flex items-center gap-2'>
-              <input
-                type='number'
-                id='bedrooms'
-                min='1'
-                max='10'
-                required
-                className='p-3 border border-gray-300 rounded-lg'
-                onChange={handleChange}
-                value={formData.bedrooms}
-              />
-              <p>Beds</p>
-            </div>
-            <div className='flex items-center gap-2'>
-              <input
-                type='number'
-                id='bathrooms'
-                min='1'
-                max='10'
-                required
-                className='p-3 border border-gray-300 rounded-lg'
-                onChange={handleChange}
-                value={formData.bathrooms}
-              />
-              <p>Baths</p>
-            </div>
-            <div className='flex items-center gap-2'>
-              <input
-                type='number'
-                id='regularPrice'
-                min='50'
-                max='10000000'
-                required
-                className='p-3 border border-gray-300 rounded-lg'
-                onChange={handleChange}
-                value={formData.regularPrice}
-              />
-              <div className='flex flex-col items-center'>
-                <p>Regular price</p>
-                <span className='text-xs'>($ / month)</span>
-              </div>
-            </div>
-            {formData.offer && (
-              <div className='flex items-center gap-2'>
-                <input
-                  type='number'
-                  id='discountPrice'
-                  min='0'
-                  max='10000000'
-                  required
-                  className='p-3 border border-gray-300 rounded-lg'
-                  onChange={handleChange}
-                  value={formData.discountPrice}
-                />
-                <div className='flex flex-col items-center'>
-                  <p>Discounted price</p>
-                  <span className='text-xs'>($ / month)</span>
+
+          <div className="lg:col-span-2">
+            <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
+              <div className="md:col-span-2">
+                <label htmlFor="country">Type</label>
+                <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
+                  <input 
+                    name="type" 
+                    id="type" 
+                    placeholder="Sale" 
+                    className="px-4 appearance-none outline-none text-gray-800 w-full bg-transparent" 
+                    value="" 
+                    onChange={()=>{}}
+                  />
+                  <button tabIndex="-1" className="cursor-pointer outline-none focus:outline-none transition-all text-gray-300 hover:text-red-600">
+                  <svg className="w-4 h-4 mx-2 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokelinecaps="round" strokeLinejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                  <button tabIndex="-1" htmlFor="show_more" className="cursor-pointer outline-none focus:outline-none border-l border-gray-200 transition-all text-gray-300 hover:text-blue-600">
+                    <svg className="w-4 h-4 mx-2 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"strokelinecaps="round" strokeLinejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                  </button>
                 </div>
               </div>
-            )}
-          </div>
-        </div>
-        <div className='flex flex-col flex-1 gap-4'>
-          <p className='font-semibold'>
-            Images:
-            <span className='font-normal text-gray-600 ml-2'>
-              The first image will be the cover (max 6)
-            </span>
-          </p>
-          <div className='flex gap-4'>
-            <input
-              className='p-3 border border-gray-300 rounded w-full'
-              type='file'
-              id='images'
-              accept='image/*'
-              multiple
-              onChange={(e) => {
-                setFiles(e.target.files);
-              }}
-            />
-            <button
-              disabled={uploading}
-              onClick={handleImageSubmit}
-              className='p-3 text-green-700 border border-green-700 rounded uppercase hover:shadow-lg disabled:opacity-80'
-            >
-              {uploading ? 'Uploading...' : 'Upload'}
-            </button>
-          </div>
-          <p className='text-red-700 text-sm'>
-            {imageUploadError && imageUploadError}
-          </p>
-          {formData.imageUrls.length > 0 &&
-            formData.imageUrls.map((url, index) => (
-              <div
-                key={url}
-                className='flex justify-between p-3 border items-center'
-              >
-                <img
-                  src={url}
-                  alt='listing image'
-                  className='w-20 h-20 object-contain rounded-lg'
+              <div className="md:col-span-3">
+                <label htmlFor="full_name">Price</label>
+                <input 
+                  type="text" 
+                  name="price"
+                  id="price" 
+                  className="h-10 border mt-1 rounded px-4 w-full bg-gray-50" 
+                  value="" 
+                  onChange={()=>{}}
                 />
-                <button
-                  type='button'
-                  onClick={() => handleRemoveImage(index)}
-                  className='p-3 text-red-700 rounded-lg uppercase hover:opacity-75'
-                >
-                  Delete
-                </button>
               </div>
-            ))}
-          <button
-            className='p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80'
-            disabled={loading || uploading}
-          >
-            {loading ? 'Creating...' : 'Create Listing'}
-          </button>
-          {error && <p className='text-red-700 text-sm'>{error}</p>}
+
+              <div className="md:col-span-1">
+                <label htmlFor="full_name">Zipcode</label>
+                <input 
+                  type="text" 
+                  name="zip_code" 
+                  id="zip_code" 
+                  className="h-10 border mt-1 rounded px-4 w-full bg-gray-50" 
+                  value="" 
+                  onChange={()=>{}}
+                />
+              </div>
+              <div className="md:col-span-1">
+                <label htmlFor="full_name">Province</label>
+                <input 
+                  type="text" 
+                  name="zip_code" 
+                  id="zip_code" 
+                  className="h-10 border mt-1 rounded px-4 w-full bg-gray-50" 
+                  value="" 
+                  onChange={()=>{}}
+                />
+              </div>
+              <div className="md:col-span-3">
+                <label htmlFor="full_name">City</label>
+                <input 
+                  type="text" 
+                  name="city"
+                  id="city" 
+                  className="h-10 border mt-1 rounded px-4 w-full bg-gray-50" 
+                  value="" 
+                  onChange={()=>{}}
+                />
+              </div>
+
+              <div className="md:col-span-1">
+                <label htmlFor="email">Surface</label>
+                <input 
+                  type="text" 
+                  name="surface" 
+                  id="surface" 
+                  className="h-10 border mt-1 rounded px-4 w-full bg-gray-50" 
+                  value="" 
+                  onChange={()=>{}}
+                />
+              </div>
+
+              <div className="md:col-span-1">
+                <label htmlFor="address">Rooms</label>
+                <div className="h-10 w-28 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
+                  <button tabIndex="-1" htmlFor="show_more" className="cursor-pointer outline-none focus:outline-none border-r border-gray-200 transition-all text-gray-500 hover:text-blue-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mx-2" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRulee="evenodd" />
+                    </svg>
+                  </button>
+                  <input 
+                    type="text"
+                    name="rooms" 
+                    id="rooms" 
+                    placeholder="0" 
+                    className="px-2 text-center appearance-none outline-none text-gray-800 w-full bg-transparent" 
+                    value="0" 
+                    onChange={()=>{}}
+                  />
+                  <button tabIndex="-1" htmlFor="show_more" className="cursor-pointer outline-none focus:outline-none border-l border-gray-200 transition-all text-gray-500 hover:text-blue-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mx-2 fill-current" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clipRule="evenodd" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div className="md:col-span-1">
+                <label htmlFor="city">Bedrooms</label>
+                <div className="h-10 w-28 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
+                  <button tabIndex="-1" htmlFor="show_more" className="cursor-pointer outline-none focus:outline-none border-r border-gray-200 transition-all text-gray-500 hover:text-blue-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mx-2" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRulee="evenodd" />
+                    </svg>
+                  </button>
+                  <input 
+                    type="text"
+                    name="bedrooms" 
+                    id="bedrooms" 
+                    placeholder="0" 
+                    className="px-2 text-center appearance-none outline-none text-gray-800 w-full bg-transparent" 
+                    value="0" 
+                    onChange={()=>{}}
+                  />
+                  <button tabIndex="-1" htmlFor="show_more" className="cursor-pointer outline-none focus:outline-none border-l border-gray-200 transition-all text-gray-500 hover:text-blue-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mx-2 fill-current" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clipRule="evenodd" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div className="md:col-span-1">
+                <label htmlFor="state">Parking </label>
+                <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
+                  <input 
+                    name="state" 
+                    id="state" 
+                    className="px-4 appearance-none outline-none text-gray-800 w-full bg-transparent" 
+                    value="" 
+                    onChange={()=>{}}
+                  />
+                </div>
+              </div>
+
+              <div className="md:col-span-1">
+                <label htmlFor="zipcode">Furnished</label>
+                <input 
+                  type="text" 
+                  name="furnished" 
+                  id="furnished" 
+                  className="h-10 border mt-1 rounded px-4 w-full bg-gray-50" 
+                  value="" 
+                  onChange={()=>{}}
+                />
+              </div>
+
+              <div className="md:col-span-4">
+                <label htmlFor="zipcode">Image (URL's only)</label>
+                <input 
+                  type="text" 
+                  name="image" 
+                  id="image" 
+                  className="h-10 border mt-1 rounded px-4 w-full bg-gray-50" 
+                  value="" 
+                  onChange={()=>{}}
+                />
+              </div>
+              <div className="md:col-span-1">
+                <button>Fetch Image</button>
+              </div>
+
+            </div>
+          </div>
         </div>
-      </form>
-    </main>
-  );
+      </div>
+    </div>
+  </div>
+</div>
+</main>
+  )
 }
