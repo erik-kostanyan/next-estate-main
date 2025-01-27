@@ -27,14 +27,12 @@ export default function CreateListing() {
   console.log(formData);
 
   const handleChange = (e) => {
-    // type options: ['rent', 'sale']
     if (e.target.id === 'type') {
       setFormData({
         ...formData,
         type: e.target.value,
       });
     }
-    // parking and furnished options: [true, false]
     if (
       e.target.id === 'parking' ||
       e.target.id === 'furnished' 
@@ -51,8 +49,6 @@ export default function CreateListing() {
         })
       }
     }
-    // number -> price, surface, rooms and bedrooms
-    // text -> zipcode, province, city and image
     if (
       e.target.type === 'number' ||
       e.target.type === 'text' ||
@@ -68,7 +64,6 @@ export default function CreateListing() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // send post request to the MongoDB database
       const res = await fetch('/api/listing/create', {
         method: 'POST',
         headers: {
@@ -83,7 +78,6 @@ export default function CreateListing() {
       if (data.success === false) {
         console.log("succes");
       }
-      // navigate to the new listing
       router.push(`/listing/${data._id}`);
     } catch (error) {
       console.log(error);

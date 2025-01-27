@@ -5,7 +5,8 @@ import {
     FaMapMarkerAlt,
     FaParking,
   } from 'react-icons/fa';
-  
+
+import Image from 'next/image'  
 import { TbRulerMeasure } from "react-icons/tb";
 
   export default async function Listing({ params }) {
@@ -35,7 +36,7 @@ import { TbRulerMeasure } from "react-icons/tb";
       return (
         <main>
           <div>
-            <img
+            <Image
               src={listing.images}
               alt={"image of house"}
               className='w-3xl h-[400px] object-cover m-auto'
