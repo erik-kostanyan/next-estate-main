@@ -13,8 +13,6 @@ export const POST = async (req) => {
     }
     const newListing = await Listing.create({
       userRef: user.publicMetadata.userMogoId,
-      // the next line is for manual import with Python's post requests
-      // userRef: data.userMongoId,
       city: data.city,
       indoor_surface: data.indoor_surface, 
       nb_bedrooms: data.nb_bedrooms, 

@@ -130,7 +130,6 @@ export default function Example() {
     sidebardata.rooms !== 0 ?urlParams.set('bedrooms', sidebardata.bedrooms): {};
     sidebardata.parking ? urlParams.set('parking', sidebardata.parking): {};
     sidebardata.furnished ?urlParams.set('furnished', sidebardata.furnished): {};
-    // urlParams.set('offer', sidebardata.offer);
     urlParams.set('sort', sidebardata.sort);
     urlParams.set('order', sidebardata.order);
     const searchQuery = urlParams.toString();
@@ -187,7 +186,6 @@ export default function Example() {
   return (
     <div className="bg-white">
       <div>
-        {/* Mobile filter dialog */}
         <Dialog open={mobileFiltersOpen} onClose={setMobileFiltersOpen} className="relative z-40 lg:hidden">
           <DialogBackdrop
             transition
@@ -211,7 +209,6 @@ export default function Example() {
                 </button>
               </div>
 
-              {/* Filters */}
               <form className="mt-4 border-t border-gray-200">
                 <h3 className="sr-only">Categories</h3>
                 <ul role="list" className="px-2 py-3 font-medium text-gray-900">
@@ -347,7 +344,6 @@ export default function Example() {
             </h2>
 
             <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
-              {/* Filters */}
               <form className="hidden lg:block">
                 <h3 className="sr-only">Categories</h3>
                 <ul role="list" className="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900">
@@ -371,11 +367,6 @@ export default function Example() {
                         </span>
                       </DisclosureButton>
                     </h3>
-
-                    {/* <div className="w-96">
-                        <Slider defaultValue={50} />
-                    </div> */}
-
                     <DisclosurePanel className="pt-6">
                       <div className="space-y-4">
                         {section.options.map((option, optionIdx) => (
