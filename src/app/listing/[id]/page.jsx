@@ -13,12 +13,12 @@ import { TbRulerMeasure } from "react-icons/tb";
     try {
       const result = await fetch(process.env.URL + '/api/listing/get', {
         method: 'POST',
-        body: JSON.stringify({ listingId: params.id }),
+        body: JSON.stringify({ listingId: params._id }),
         cache: 'no-store',
       });
       const data = await result.json();
+      console.log(data);
       listing = data[0];
-      console.log(listing);
     } catch (error) {
       listing = { title: 'Failed to load listing' };
     }
