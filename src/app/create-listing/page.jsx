@@ -105,7 +105,7 @@ export default function CreateListing() {
 
 
   return (
-    <main className="h-screen overflow-hidden flex items-center justify-center py-36" >
+    <main className="flex items-center justify-center">
     <div className="min-h-screen p-6 bg-gray-100 flex items-center justify-center">
   <div className="container max-w-screen-lg mx-auto">
     <div>
