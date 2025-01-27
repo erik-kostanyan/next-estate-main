@@ -5,11 +5,6 @@ const listingSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    geolocation: {
-      type: String,
-      required: false,
-      default: "",
-    },
     indoor_surface: {
       type: Number,
       required: true

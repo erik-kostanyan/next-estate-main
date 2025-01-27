@@ -7,15 +7,9 @@ import { useRouter } from 'next/navigation';
 
 export default function CreateListing() {
   const { isSignedIn, user, isLoaded } = useUser();
-  const [files, setFiles] = useState([]);
-  const [uploading, setUploading] = useState(false);
-  const [imageUploadError, setImageUploadError] = useState(false);
-  const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const [formData, setFormData] = useState({
     city: '',
-    geolocation: '',
     indoor_surface: 0,
     nb_bedrooms: 1,
     nb_rooms: 1,
@@ -33,22 +27,32 @@ export default function CreateListing() {
   console.log(formData);
 
   const handleChange = (e) => {
-    if (e.target.id === 'sale' || e.target.id === 'rent') {
+    // type options: ['rent', 'sale']
+    if (e.target.id === 'type') {
       setFormData({
         ...formData,
-        type: e.target.id,
+        type: e.target.value,
       });
     }
+    // parking and furnished options: [true, false]
     if (
       e.target.id === 'parking' ||
-      e.target.id === 'furnished' ||
-      e.target.id === 'offer'
+      e.target.id === 'furnished' 
     ) {
-      setFormData({
-        ...formData,
-        [e.target.id]: e.target.checked,
-      });
+      if (e.target.value === 'true') {
+        setFormData({
+          ...formData,
+          [e.target.id]: true
+        })
+      } else if (e.target.value === 'false') {
+        setFormData({
+          ...formData,
+          [e.target.id]: false
+        })
+      }
     }
+    // number -> price, surface, rooms and bedrooms
+    // text -> zipcode, province, city and image
     if (
       e.target.type === 'number' ||
       e.target.type === 'text' ||
@@ -59,6 +63,7 @@ export default function CreateListing() {
         [e.target.id]: e.target.value,
       });
     }
+    console.log(formData);
   };
 
   const handleSubmit = async (e) => {
@@ -66,6 +71,7 @@ export default function CreateListing() {
     try {
       setLoading(true);
       setError(false);
+      // send post request to the MongoDB database
       const res = await fetch('/api/listing/create', {
         method: 'POST',
         headers: {
@@ -81,6 +87,7 @@ export default function CreateListing() {
       if (data.success === false) {
         setError(data.message);
       }
+      // navigate to the new listing
       router.push(`/listing/${data._id}`);
     } catch (error) {
       setError(error.message);
@@ -103,7 +110,7 @@ export default function CreateListing() {
 
 
   return (
-    <main className="h-screen overflow-hidden flex items-center justify-center pt-36" >
+    <main className="h-screen overflow-hidden flex items-center justify-center py-36" >
     <div className="min-h-screen p-6 bg-gray-100 flex items-center justify-center">
   <div className="container max-w-screen-lg mx-auto">
     <div>
@@ -122,171 +129,163 @@ export default function CreateListing() {
               <div className="md:col-span-2">
                 <label htmlFor="country">Type</label>
                 <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
-                  <input 
+                  <select 
+                    type="text"
                     name="type" 
                     id="type" 
-                    placeholder="Sale" 
                     className="px-4 appearance-none outline-none text-gray-800 w-full bg-transparent" 
-                    value="" 
-                    onChange={()=>{}}
-                  />
-                  <button tabIndex="-1" className="cursor-pointer outline-none focus:outline-none transition-all text-gray-300 hover:text-red-600">
-                  <svg className="w-4 h-4 mx-2 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokelinecaps="round" strokeLinejoin="round">
-                      <line x1="18" y1="6" x2="6" y2="18"></line>
-                      <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                  </button>
-                  <button tabIndex="-1" htmlFor="show_more" className="cursor-pointer outline-none focus:outline-none border-l border-gray-200 transition-all text-gray-300 hover:text-blue-600">
-                    <svg className="w-4 h-4 mx-2 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"strokelinecaps="round" strokeLinejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
-                  </button>
+                    onChange={handleChange}
+                    defaultValue={"default"}
+                  >
+                    <option value="default">-- Please Select -- </option>
+                    <option value="sale" id="sale">Sale</option>
+                    <option value="rent" id="rent">Rent</option>
+                  </select>
                 </div>
+
               </div>
               <div className="md:col-span-3">
-                <label htmlFor="full_name">Price</label>
+                <label htmlFor="price">Price</label>
                 <input 
-                  type="text" 
+                  type="number" 
                   name="price"
                   id="price" 
                   className="h-10 border mt-1 rounded px-4 w-full bg-gray-50" 
-                  value="" 
-                  onChange={()=>{}}
+                  onChange={handleChange}
                 />
               </div>
 
               <div className="md:col-span-1">
-                <label htmlFor="full_name">Zipcode</label>
+                <label htmlFor="zipcode">Zipcode</label>
                 <input 
                   type="text" 
                   name="zip_code" 
                   id="zip_code" 
                   className="h-10 border mt-1 rounded px-4 w-full bg-gray-50" 
-                  value="" 
-                  onChange={()=>{}}
+                  onChange={handleChange}
                 />
               </div>
               <div className="md:col-span-1">
-                <label htmlFor="full_name">Province</label>
+                <label htmlFor="province">Province</label>
                 <input 
                   type="text" 
                   name="zip_code" 
                   id="zip_code" 
                   className="h-10 border mt-1 rounded px-4 w-full bg-gray-50" 
-                  value="" 
-                  onChange={()=>{}}
+                  onChange={handleChange}
                 />
               </div>
               <div className="md:col-span-3">
-                <label htmlFor="full_name">City</label>
+                <label htmlFor="city">City</label>
                 <input 
                   type="text" 
                   name="city"
                   id="city" 
                   className="h-10 border mt-1 rounded px-4 w-full bg-gray-50" 
-                  value="" 
-                  onChange={()=>{}}
+                  onChange={handleChange}
                 />
               </div>
 
               <div className="md:col-span-1">
-                <label htmlFor="email">Surface</label>
+                <label htmlFor="indoor_surface">Surface (in m²)</label>
                 <input 
-                  type="text" 
-                  name="surface" 
-                  id="surface" 
+                  type="number" 
+                  name="indoor_surface" 
+                  id="indoor_surface" 
                   className="h-10 border mt-1 rounded px-4 w-full bg-gray-50" 
-                  value="" 
-                  onChange={()=>{}}
+                  onChange={handleChange}
                 />
               </div>
 
               <div className="md:col-span-1">
-                <label htmlFor="address">Rooms</label>
+                <label htmlFor="rooms">Rooms</label>
                 <div className="h-10 w-28 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
-                  <button tabIndex="-1" htmlFor="show_more" className="cursor-pointer outline-none focus:outline-none border-r border-gray-200 transition-all text-gray-500 hover:text-blue-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mx-2" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRulee="evenodd" />
-                    </svg>
-                  </button>
                   <input 
-                    type="text"
+                    type="number"
                     name="rooms" 
                     id="rooms" 
                     placeholder="0" 
                     className="px-2 text-center appearance-none outline-none text-gray-800 w-full bg-transparent" 
-                    value="0" 
-                    onChange={()=>{}}
+                    onChange={handleChange}
                   />
-                  <button tabIndex="-1" htmlFor="show_more" className="cursor-pointer outline-none focus:outline-none border-l border-gray-200 transition-all text-gray-500 hover:text-blue-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mx-2 fill-current" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clipRule="evenodd" />
-                    </svg>
-                  </button>
                 </div>
               </div>
 
               <div className="md:col-span-1">
-                <label htmlFor="city">Bedrooms</label>
+                <label htmlFor="bedrooms">Bedrooms</label>
                 <div className="h-10 w-28 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
-                  <button tabIndex="-1" htmlFor="show_more" className="cursor-pointer outline-none focus:outline-none border-r border-gray-200 transition-all text-gray-500 hover:text-blue-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mx-2" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRulee="evenodd" />
-                    </svg>
-                  </button>
                   <input 
-                    type="text"
+                    type="number"
                     name="bedrooms" 
                     id="bedrooms" 
                     placeholder="0" 
                     className="px-2 text-center appearance-none outline-none text-gray-800 w-full bg-transparent" 
-                    value="0" 
-                    onChange={()=>{}}
+                    onChange={handleChange}
                   />
-                  <button tabIndex="-1" htmlFor="show_more" className="cursor-pointer outline-none focus:outline-none border-l border-gray-200 transition-all text-gray-500 hover:text-blue-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mx-2 fill-current" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clipRule="evenodd" />
-                    </svg>
-                  </button>
                 </div>
               </div>
 
               <div className="md:col-span-1">
-                <label htmlFor="state">Parking </label>
+                <label htmlFor="parking">Parking </label>
                 <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
-                  <input 
-                    name="state" 
-                    id="state" 
+                  <select 
+                    type="text"
+                    name="parking" 
+                    id="parking" 
+                    defaultValue={"default"}
                     className="px-4 appearance-none outline-none text-gray-800 w-full bg-transparent" 
-                    value="" 
-                    onChange={()=>{}}
-                  />
+                    onChange={handleChange}
+                  >
+                    <option value="default" disabled>-- Select --</option>
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                  </select>
                 </div>
               </div>
 
               <div className="md:col-span-1">
-                <label htmlFor="zipcode">Furnished</label>
-                <input 
+                <label htmlFor="furnished">Furnished</label>
+                <select 
                   type="text" 
                   name="furnished" 
                   id="furnished" 
+                  defaultValue={"default"}
                   className="h-10 border mt-1 rounded px-4 w-full bg-gray-50" 
-                  value="" 
-                  onChange={()=>{}}
-                />
+                  onChange={handleChange}
+                >
+                  <option value="default" disabled>-- Select --</option>
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
+                </select>
               </div>
-
               <div className="md:col-span-4">
-                <label htmlFor="zipcode">Image (URL's only)</label>
+                <label htmlFor="images">Image (URL's only)</label>
                 <input 
                   type="text" 
-                  name="image" 
-                  id="image" 
+                  name="images" 
+                  id="images" 
                   className="h-10 border mt-1 rounded px-4 w-full bg-gray-50" 
-                  value="" 
-                  onChange={()=>{}}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="md:col-span-5">
+                <label htmlFor="discription">Discription</label>
+                <input 
+                  type="textarea" 
+                  name="discription" 
+                  id="discription" 
+                  className="h-10 border mt-1 rounded px-4 w-full bg-gray-50" 
+                  onChange={handleChange}
                 />
               </div>
               <div className="md:col-span-1">
-                <button>Fetch Image</button>
+                <button 
+                  type="submit" 
+                  className="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                  onClick={handleSubmit}
+                  >
+                  Submit
+                </button>
               </div>
 
             </div>

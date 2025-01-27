@@ -14,7 +14,6 @@ export const POST = async (req) => {
     const newListing = await Listing.create({
       userRef: user.publicMetadata.userMogoId,
       city: data.city,
-      geolocation: data.geolocation, 
       indoor_surface: data.indoor_surface, 
       nb_bedrooms: data.nb_bedrooms, 
       nb_rooms: data.nb_rooms, 
