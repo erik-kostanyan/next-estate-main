@@ -122,7 +122,7 @@ export default function CreateListing() {
           <div className="lg:col-span-2">
             <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
               <div className="md:col-span-2">
-                <label htmlFor="country">Type</label>
+                <label>Type</label>
                 <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
                   <select 
                     type="text"
@@ -140,7 +140,7 @@ export default function CreateListing() {
 
               </div>
               <div className="md:col-span-3">
-                <label htmlFor="price">Price</label>
+                <label>Price</label>
                 <input 
                   type="number" 
                   name="price"
@@ -151,7 +151,7 @@ export default function CreateListing() {
               </div>
 
               <div className="md:col-span-1">
-                <label htmlFor="zipcode">Zipcode</label>
+                <label>Zipcode</label>
                 <input 
                   type="text" 
                   name="zip_code" 
@@ -161,17 +161,17 @@ export default function CreateListing() {
                 />
               </div>
               <div className="md:col-span-1">
-                <label htmlFor="province">Province</label>
+                <label>Province</label>
                 <input 
                   type="text" 
-                  name="zip_code" 
-                  id="zip_code" 
+                  name="province" 
+                  id="province" 
                   className="h-10 border mt-1 rounded px-4 w-full bg-gray-50" 
                   onChange={handleChange}
                 />
               </div>
               <div className="md:col-span-3">
-                <label htmlFor="city">City</label>
+                <label>City</label>
                 <input 
                   type="text" 
                   name="city"
@@ -182,7 +182,7 @@ export default function CreateListing() {
               </div>
 
               <div className="md:col-span-1">
-                <label htmlFor="indoor_surface">Surface (in m²)</label>
+                <label>Surface (in m²)</label>
                 <input 
                   type="number" 
                   name="indoor_surface" 
@@ -193,7 +193,7 @@ export default function CreateListing() {
               </div>
 
               <div className="md:col-span-1">
-                <label htmlFor="rooms">Rooms</label>
+                <label>Rooms</label>
                 <div className="h-10 w-28 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
                   <input 
                     type="number"
@@ -207,7 +207,7 @@ export default function CreateListing() {
               </div>
 
               <div className="md:col-span-1">
-                <label htmlFor="bedrooms">Bedrooms</label>
+                <label>Bedrooms</label>
                 <div className="h-10 w-28 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
                   <input 
                     type="number"
@@ -221,7 +221,7 @@ export default function CreateListing() {
               </div>
 
               <div className="md:col-span-1">
-                <label htmlFor="parking">Parking </label>
+                <label>Parking </label>
                 <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
                   <select 
                     type="text"
@@ -239,7 +239,7 @@ export default function CreateListing() {
               </div>
 
               <div className="md:col-span-1">
-                <label htmlFor="furnished">Furnished</label>
+                <label>Furnished</label>
                 <select 
                   type="text" 
                   name="furnished" 
@@ -254,7 +254,7 @@ export default function CreateListing() {
                 </select>
               </div>
               <div className="md:col-span-4">
-                <label htmlFor="images">Image (URL's only)</label>
+                <label>Image (URL's only)</label>
                 <input 
                   type="text" 
                   name="images" 
@@ -264,7 +264,7 @@ export default function CreateListing() {
                 />
               </div>
               <div className="md:col-span-5">
-                <label htmlFor="discription">Discription</label>
+                <label>Discription</label>
                 <input 
                   type="textarea" 
                   name="discription" 

@@ -1,6 +1,7 @@
 import localFont from 'next/font/local';
 import './globals.css';
 import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 import { ClerkProvider } from '@clerk/nextjs';
 
 const geistSans = localFont({
@@ -22,12 +23,13 @@ const geistMono = localFont({
 export default function RootLayout({ children }) {
   return (
     <ClerkProvider dynamic>
-      <html lang='en'>
+      <html lang='en' suppressHydrationWarning >
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
           <Header />
           {children}
+          <Footer />
         </body>
       </html>
     </ClerkProvider>
