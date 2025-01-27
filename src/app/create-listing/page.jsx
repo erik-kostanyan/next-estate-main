@@ -63,14 +63,11 @@ export default function CreateListing() {
         [e.target.id]: e.target.value,
       });
     }
-    console.log(formData);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      setLoading(true);
-      setError(false);
       // send post request to the MongoDB database
       const res = await fetch('/api/listing/create', {
         method: 'POST',
@@ -83,15 +80,13 @@ export default function CreateListing() {
         }),
       });
       const data = await res.json();
-      setLoading(false);
       if (data.success === false) {
-        setError(data.message);
+        console.log("succes");
       }
       // navigate to the new listing
       router.push(`/listing/${data._id}`);
     } catch (error) {
-      setError(error.message);
-      setLoading(false);
+      console.log(error);
     }
   };
 
