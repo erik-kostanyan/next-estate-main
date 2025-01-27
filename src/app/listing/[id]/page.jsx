@@ -13,7 +13,7 @@ import { TbRulerMeasure } from "react-icons/tb";
     try {
       const result = await fetch(process.env.URL + '/api/listing/get', {
         method: 'POST',
-        body: JSON.stringify({ listingId: params._id }),
+        body: JSON.stringify({ listingId: params.id }),
         cache: 'no-store',
       });
       const data = await result.json();
