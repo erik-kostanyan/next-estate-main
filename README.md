@@ -14,7 +14,7 @@ You can build this project yourself by linking your Clerk, MongoDB and NexJS var
 The database is populated with real world data that I have collected from several websites with a Python script.
 
 This project is deployed and available at:
-https://next-estate-main-qrkx86lb5-erik-kostanyans-projects.vercel.app
+https://next-estate-main-git-main-erik-kostanyans-projects.vercel.app/
 
 ## MongoDB
 ### MongoDB file structure

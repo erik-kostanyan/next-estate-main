@@ -18,6 +18,7 @@ import { TbRulerMeasure } from "react-icons/tb";
       });
       const data = await result.json();
       listing = data[0];
+      console.log(listing);
     } catch (error) {
       listing = { title: 'Failed to load listing' };
     }
