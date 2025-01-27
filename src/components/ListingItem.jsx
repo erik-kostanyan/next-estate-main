@@ -1,12 +1,11 @@
 import Link from 'next/link';
 import { MdLocationOn } from 'react-icons/md';
-import Image from 'next/image'
 
 export default function ListingItem({ listing }) {
   return (
     <div className='bg-white shadow-md hover:shadow-lg transition-shadow overflow-hidden rounded-lg w-full sm:w-[330px]'>
       <Link href={`/listing/${listing._id}`}>
-        <Image
+        <img
           src={
             listing.images ||
             'https://53.fs1.hubspotusercontent-na1.net/hub/53/hubfs/Sales_Blog/real-estate-business-compressor.jpg?width=595&height=400&name=real-estate-business-compressor.jpg'

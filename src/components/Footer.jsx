@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image'
 
 export default function Footer() {
     return (
@@ -10,7 +9,7 @@ export default function Footer() {
                 <div className="md:flex md:justify-between">
                 <div className="mb-6 md:mb-0">
                     <Link href="#" className="flex items-center">
-                        <Image src="/logo.png" className="h-16 me-3" alt="business Logo" />
+                        <img src="/logo.png" className="h-16 me-3" alt="business Logo" />
                         <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">LiveIMMO</span>
                     </Link>
                 </div>
