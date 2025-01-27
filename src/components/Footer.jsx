@@ -8,7 +8,8 @@ export default function Footer() {
             <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
                 <div className="md:flex md:justify-between">
                 <div className="mb-6 md:mb-0">
-                    <Link href="https://flowbite.com/" className="flex items-center">
+                    <Link href="#" className="flex items-center">
+                        <img src="/logo.png" className="h-16 me-3" alt="business Logo" />
                         <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">LiveIMMO</span>
                     </Link>
                 </div>
