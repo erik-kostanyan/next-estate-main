@@ -22,7 +22,7 @@ import { TbRulerMeasure } from "react-icons/tb";
     } catch (error) {
       listing = { title: 'Failed to load listing' };
     }
-    if (!listing || listing.name === 'Failed to load listing') {
+    if (!listing || listing.title === 'Failed to load listing') {
       return (
         <main className='p-3 flex flex-col max-w-6xl mx-auto min-h-screen'>
           <h2 className='text-xl mt-10 p-3 text-center font-serif max-w-2xl mx-auto lg:text-2xl'>
